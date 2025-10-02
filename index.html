@@ -45,6 +45,22 @@
   <img class="icon on" src="img/collapse.png">
 </a>
 
+  <button id="enter-vr" style="
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    background: #007bff;
+    color: white;
+    cursor: pointer;
+    z-index: 9999;
+  ">
+    Entrar en VR
+  </button>
+  
 <a href="javascript:void(0)" id="viewUp" class="viewControlButton viewControlButton-1">
   <img class="icon" src="img/up.png">
 </a>
@@ -70,6 +86,25 @@
 
 <script src="data.js"></script>
 <script src="index.js"></script>
+
+<script>
+    document.getElementById("enter-vr").addEventListener("click", () => {
+      if (navigator.xr) {
+        navigator.xr.isSessionSupported("immersive-vr").then((supported) => {
+          if (supported) {
+            navigator.xr.requestSession("immersive-vr").then((session) => {
+              console.log("Sesión VR iniciada", session);
+              // Aquí es donde luego conectas Marzipano a la sesión VR
+            });
+          } else {
+            alert("Tu navegador no soporta VR.");
+          }
+        });
+      } else {
+        alert("Tu navegador no soporta WebXR.");
+      }
+    });
+</script>
 
 </body>
 </html>
