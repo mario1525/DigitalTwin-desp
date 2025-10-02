@@ -291,9 +291,6 @@
     wrapper.classList.add('hotspot');
     wrapper.classList.add('info-hotspot');
 
-
-
-
     // Create hotspot/tooltip header.
     var header = document.createElement('div');
     header.classList.add('info-hotspot-header');
@@ -305,9 +302,6 @@
     icon.src = 'img/info.png';
     icon.classList.add('info-hotspot-icon');
     iconWrapper.appendChild(icon);
-
-     var source = Marzipano.ImageUrlSource.fromString("img/0-laboratorio-analisis");
-
 
     // Create title element.
     var titleWrapper = document.createElement('div');
