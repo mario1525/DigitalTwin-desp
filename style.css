@@ -1,3 +1,9 @@
+/* 
+ * Reinicio Global y Estilos Base
+ * Estas reglas aseguran un box-sizing consistente, previenen la selección de texto y el arrastre
+ * para elementos interactivos, y establecen la estructura básica del documento para el visor de panoramas.
+ * Prefijos de proveedores aseguran compatibilidad entre navegadores (WebKit, Mozilla, MS).
+ */
 * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -16,6 +22,11 @@
   -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
+/* 
+ * Estilos de HTML y Body
+ * Cobertura completa del viewport sin márgenes ni relleno, desbordamiento oculto para prevenir el desplazamiento,
+ * y un tema oscuro adecuado para la visualización de panoramas. La pila de fuentes prioriza las del sistema.
+ */
 html, body {
   width: 100%;
   height: 100%;
@@ -28,11 +39,19 @@ html, body {
   color: #fff;
 }
 
+/* 
+ * Estilos de Enlaces
+ * Aseguran que los enlaces hereden el color y no tengan subrayado para una integración fluida con la UI.
+ */
 a, a:hover, a:active, a:visited {
   text-decoration: none;
   color: inherit;
 }
 
+/* 
+ * Contenedor de Panorama
+ * Posicionamiento absoluto para llenar todo el viewport, con desbordamiento oculto para el visor de 360 grados.
+ */
 #pano {
   position: absolute;
   top: 0;
@@ -42,6 +61,11 @@ a, a:hover, a:active, a:visited {
   overflow: hidden;
 }
 
+/* 
+ * Estilos de la Barra de Título
+ * Barra superior para mostrar el nombre de la escena actual. Ajusta el ancho según la presencia de controles.
+ * Fondo semi-transparente con elipsis para títulos largos. Efecto glassmorphism: transparencia y desenfoque para apariencia de vidrio esmerilado.
+ */
 #titleBar {
   position: absolute;
   top: 0;
@@ -49,27 +73,34 @@ a, a:hover, a:active, a:visited {
   right: 40px;
   height: 40px;
   text-align: center;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* Ajustes móviles: Barra de título más alta y margen derecho más amplio para objetivos táctiles. */
 .mobile #titleBar {
   height: 50px;
   right: 50px;
 }
 
-/* If there is a fullscreen button the title bar must make space for it */
+/* Si hay un botón de pantalla completa, la barra de título debe dejar espacio para él */
 body.fullscreen-enabled #titleBar {
   right: 80px;
 }
 
+/* Ajuste fullscreen móvil */
 body.fullscreen-enabled.mobile #titleBar {
   right: 100px;
 }
 
-/* If there are multiple scenes the title bar must make space for the scene list toggle */
+/* Si hay múltiples escenas, la barra de título debe dejar espacio para el interruptor de lista de escenas */
 body.multiple-scenes #titleBar {
   left: 40px;
 }
 
+/* Ajuste multiple-scenes móvil */
 body.multiple-scenes.mobile #titleBar {
   left: 50px;
 }
@@ -79,8 +110,8 @@ body.multiple-scenes.mobile #titleBar {
   height: 100%;
   line-height: 30px;
   padding: 5px;
-  background-color: rgb(58,68,84);
-  background-color: rgba(58,68,84,0.8);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(5px);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -91,10 +122,16 @@ body.multiple-scenes.mobile #titleBar {
   user-select: text;
 }
 
+/* Altura de línea del nombre de escena móvil */
 .mobile #titleBar .sceneName {
   line-height: 40px;
 }
 
+/* 
+ * Botón de Interruptor de Pantalla Completa
+ * Botón alineado a la derecha para alternar el modo de pantalla completa. Oculto a menos que sea compatible.
+ * Estados de ícono (on/off) para entrar/salir de pantalla completa. Efecto glassmorphism aplicado.
+ */
 #fullscreenToggle {
   display: none;
   position: absolute;
@@ -103,15 +140,20 @@ body.multiple-scenes.mobile #titleBar {
   width: 40px;
   height: 40px;
   padding: 5px;
-  background-color: rgb(103,115,131);
-  background-color: rgba(103,115,131,0.8);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* Tamaño del interruptor fullscreen móvil */
 .mobile #fullscreenToggle {
   width: 50px;
   height: 50px;
 }
 
+/* Mostrar cuando fullscreen está habilitado */
 body.fullscreen-enabled #fullscreenToggle {
   display: block;
 }
@@ -124,11 +166,13 @@ body.fullscreen-enabled #fullscreenToggle {
   height: 30px;
 }
 
+/* Posicionamiento de ícono móvil */
 .mobile #fullscreenToggle .icon {
   top: 10px;
   right: 10px;
 }
 
+/* Por defecto: Mostrar ícono off */
 #fullscreenToggle .icon.on {
   display: none;
 }
@@ -137,6 +181,7 @@ body.fullscreen-enabled #fullscreenToggle {
   display: block;
 }
 
+/* Estado habilitado: Mostrar ícono on */
 #fullscreenToggle.enabled .icon.on {
   display: block;
 }
@@ -145,6 +190,11 @@ body.fullscreen-enabled #fullscreenToggle {
   display: none;
 }
 
+/* 
+ * Botón de Interruptor de Rotación Automática
+ * Controla la rotación automática del panorama. Siempre visible, posicionado a la derecha (se desplaza a la izquierda si fullscreen está presente).
+ * Ícono alterna entre estados on/off. Efecto glassmorphism para transparencia y vidrio.
+ */
 #autorotateToggle {
   display: block;
   position: absolute;
@@ -153,20 +203,25 @@ body.fullscreen-enabled #fullscreenToggle {
   width: 40px;
   height: 40px;
   padding: 5px;
-  background-color: rgb(103,115,131);
-  background-color: rgba(103,115,131,0.8);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* Tamaño de rotación automática móvil */
 .mobile #autorotateToggle {
   width: 50px;
   height: 50px;
 }
 
-/* If there is a fullscreen button, autorotate must placed a bit to the left */
+/* Si hay un botón de fullscreen, autorotate debe colocarse un poco a la izquierda */
 body.fullscreen-enabled #autorotateToggle {
   right: 40px;
 }
 
+/* Desplazamiento autorotate fullscreen móvil */
 body.fullscreen-enabled.mobile #autorotateToggle {
   right: 50px;
 }
@@ -179,11 +234,13 @@ body.fullscreen-enabled.mobile #autorotateToggle {
   height: 30px;
 }
 
+/* Posicionamiento de ícono móvil */
 .mobile #autorotateToggle .icon {
   top: 10px;
   right: 10px;
 }
 
+/* Por defecto: Mostrar ícono off */
 #autorotateToggle .icon.on {
   display: none;
 }
@@ -192,6 +249,7 @@ body.fullscreen-enabled.mobile #autorotateToggle {
   display: block;
 }
 
+/* Estado habilitado: Mostrar ícono on */
 #autorotateToggle.enabled .icon.on {
   display: block;
 }
@@ -200,6 +258,11 @@ body.fullscreen-enabled.mobile #autorotateToggle {
   display: none;
 }
 
+/* 
+ * Botón de Interruptor de Lista de Escenas
+ * Botón alineado a la izquierda para mostrar/ocultar la lista de escenas en tours multi-escena.
+ * Incluye texto e ícono para claridad. Efecto glassmorphism.
+ */
 #sceneListToggle {
   position: absolute;
   top: 0;
@@ -207,10 +270,14 @@ body.fullscreen-enabled.mobile #autorotateToggle {
   width: 40px;
   height: 40px;
   padding: 5px;
-  background-color: rgb(103,115,131);
-  background-color: rgba(103,115,131,0.8);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* Tamaño del interruptor de lista de escenas móvil */
 .mobile #sceneListToggle {
   width: 50px;
   height: 50px;
@@ -232,11 +299,13 @@ body.fullscreen-enabled.mobile #autorotateToggle {
   height: 30px;
 }
 
+/* Posicionamiento de ícono móvil */
 .mobile #sceneListToggle .icon {
   top: 10px;
   right: 10px;
 }
 
+/* Por defecto: Mostrar ícono off */
 #sceneListToggle .icon.on {
   display: none;
 }
@@ -245,6 +314,7 @@ body.fullscreen-enabled.mobile #autorotateToggle {
   display: block;
 }
 
+/* Estado habilitado: Mostrar ícono on */
 #sceneListToggle.enabled .icon.on {
   display: block;
 }
@@ -253,6 +323,12 @@ body.fullscreen-enabled.mobile #autorotateToggle {
   display: none;
 }
 
+/* 
+ * Panel de Lista de Escenas
+ * Barra lateral deslizante para navegar escenas. Se anima desde la izquierda.
+ * Lista desplazable de nombres de escenas con resaltado de hover y estado actual.
+ * En móvil, superposición de ancho completo. Efecto glassmorphism para el panel.
+ */
 #sceneList {
   position: absolute;
   top: 0;
@@ -265,18 +341,24 @@ body.fullscreen-enabled.mobile #autorotateToggle {
   margin-left: 0;
   -webkit-transition: margin-left 0.5s ease-in-out;
   transition: margin-left 0.5s ease-in-out;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* Relleno de lista de escenas móvil */
 .mobile #sceneList {
   padding-top: 50px;
 }
 
 #sceneList .scenes {
   width: 100%;
-  background-color: rgb(58,68,84);
-  background-color: rgba(58,68,84,0.8);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(5px);
 }
 
+/* Lista de escenas de pantalla completa en móvil */
 .mobile #sceneList {
   width: 100%;
   height: 100%;
@@ -291,6 +373,7 @@ body.fullscreen-enabled.mobile #autorotateToggle {
   height: 100%;
 }
 
+/* Habilitado: Deslizar hacia adentro */
 #sceneList.enabled {
   margin-left: 220px;
 }
@@ -301,6 +384,7 @@ body.fullscreen-enabled.mobile #autorotateToggle {
   height: 30px;
 }
 
+/* Altura de escena móvil */
 .mobile #sceneList .scene {
   height: 40px;
 }
@@ -313,29 +397,36 @@ body.fullscreen-enabled.mobile #autorotateToggle {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* Altura de línea de texto móvil */
 .mobile #sceneList .scene .text {
   line-height: 40px;
 }
 
+/* Efecto hover para dispositivos no táctiles */
 .no-touch #sceneList .scene:hover {
-  background-color: rgb(103,115,131);
-  background-color: rgba(103,115,131,0.8);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(5px);
 }
 
 #sceneList .scene.current {
-  background-color: rgb(103,115,131);
-  background-color: rgba(103,115,131,0.8);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
 }
 
-/* Hide scene list when only a single scene exists */
+/* Ocultar lista de escenas cuando solo existe una escena única */
 body.single-scene #sceneList, body.single-scene #sceneListToggle {
   display: none;
 }
 
-/* Link hotspot */
-
+/* 
+ * Estilos de Hotspot de Enlace
+ * Puntos de navegación interactivos en el panorama. Íconos circulares con tooltips en hover.
+ * Se desvanece entrada/salida para una UX suave; más grande en móvil. Efecto glassmorphism en íconos y tooltips.
+ */
 .link-hotspot {
   width: 60px;
   height: 60px;
@@ -350,6 +441,7 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
   opacity: 1;
 }
 
+/* Tamaño de hotspot móvil */
 .mobile .link-hotspot {
   width: 70px;
   height: 70px;
@@ -359,13 +451,22 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
   width: 100%;
   height: 100%;
   cursor: pointer;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* 
+ * Tooltip de Hotspot de Enlace
+ * Aparece en hover con el nombre de la escena. Desliza desde la derecha con desvanecimiento.
+ * Ancho limitado, elipsis para texto largo. Eventos de puntero deshabilitados por defecto. Glassmorphism.
+ */
 .link-hotspot-tooltip {
   position: absolute;
   left: 100%;
   top: 14px; /* ( 60 - (16 + 2*8) ) / 2 */
-
   margin-left: 3px;
 
   font-size: 16px;
@@ -374,10 +475,11 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
 
   padding: 8px 10px;
 
-  border-radius: 5px;
-
-  background-color: rgb(58,68,84);
-  background-color: rgba(58,68,84,0.8);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
   color: #fff;
 
@@ -403,10 +505,12 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
               opacity 0.3s;
 }
 
-.mobile .link-hotspot {
+/* Posicionamiento de tooltip móvil */
+.mobile .link-hotspot-tooltip {
   top: 19px; /* ( 70 - (16 + 2*8) ) / 2 */
 }
 
+/* Hover: Mostrar y deslizar hacia adentro */
 .no-touch .link-hotspot:hover .link-hotspot-tooltip {
   opacity: 1;
   -ms-transform: translateX(0);
@@ -414,7 +518,7 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
   transform: translateX(0);
 }
 
-/* Prevent tooltip from triggering */
+/* Prevenir que el tooltip dispare eventos */
 .link-hotspot-tooltip {
   pointer-events: none;
 }
@@ -422,7 +526,7 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
   pointer-events: all;
 }
 
-/* Fallback mode without pointer-events (IE8-10) */
+/* Modo fallback sin pointer-events (IE8-10) */
 .tooltip-fallback .link-hotspot-tooltip {
   display: none;
 }
@@ -430,8 +534,12 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
   display: block;
 }
 
-/* Info hotspot */
-
+/* 
+ * Estilos de Hotspot de Información
+ * Puntos de información interactivos. Encabezado circular se expande para mostrar título y texto en interacción.
+ * Animaciones para revelación suave; soporta hover en desktop, clic en móvil.
+ * Texto seleccionable para copiar contenido. Glassmorphism en encabezados y texto.
+ */
 .info-hotspot {
   line-height: 1.2em;
   opacity: 0.9;
@@ -439,6 +547,7 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
   transition: opacity 0.2s 0.2s;
 }
 
+/* Hover: Opacidad completa */
 .no-touch .info-hotspot:hover {
   opacity: 1;
   -webkit-transition: opacity 0.2s;
@@ -453,33 +562,39 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
   width: 40px;
   height: 40px;
   border-radius: 20px;
-  background-color: rgb(103,115,131);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   cursor: pointer;
   -webkit-transition: width 0.3s ease-in-out 0.5s,
                       border-radius 0.3s ease-in-out 0.5s;
   transition: width 0.3s ease-in-out 0.5s,
               border-radius 0.3s ease-in-out 0.5s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* Tamaño de encabezado móvil */
 .mobile .info-hotspot .info-hotspot-header {
   width: 50px;
   height: 50px;
   border-radius: 25px;
 }
 
+/* Hover en desktop: Expandir encabezado */
 .desktop.no-touch .info-hotspot .info-hotspot-header:hover {
   width: 260px;
-  border-radius: 5px;
+  border-radius: 8px;
   -webkit-transition: width 0.3s ease-in-out,
                       border-radius 0.3s ease-in-out;
   transition: width 0.3s ease-in-out,
               border-radius 0.3s ease-in-out;
 }
 
+/* Estado expandido visible */
 .desktop .info-hotspot.visible .info-hotspot-header,
 .desktop.no-touch .info-hotspot.visible .info-hotspot-header:hover {
   width: 260px;
-  border-radius: 5px;
+  border-radius: 8px;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
@@ -494,6 +609,7 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
   height: 40px;
 }
 
+/* Envoltorio de ícono móvil */
 .mobile .info-hotspot .info-hotspot-icon-wrapper {
   width: 50px;
   height: 50px;
@@ -505,6 +621,7 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
   margin: 5%;
 }
 
+/* Envoltorio de título: Anima ancho y relleno para revelación */
 .info-hotspot .info-hotspot-title-wrapper {
   position: absolute;
   left: 40px;
@@ -519,6 +636,7 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
               padding 0s 0.4s;
 }
 
+/* Envoltorio de título expandido */
 .desktop .info-hotspot.visible .info-hotspot-title-wrapper,
 .desktop.no-touch .info-hotspot .info-hotspot-header:hover .info-hotspot-title-wrapper {
   width: 220px;
@@ -546,14 +664,17 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
   user-select: text;
 }
 
+/* Envoltorio de botón cerrar: Rota hacia adentro en expansión. Glassmorphism. */
 .info-hotspot .info-hotspot-close-wrapper {
   position: absolute;
   left: 260px;
   top: 0;
   height: 40px;
   width: 40px;
-  border-top-right-radius: 5px;
-  background-color: rgb(78,88,104);
+  border-top-right-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   visibility: hidden;
   -ms-transform: perspective(200px) rotateY(90deg);
   -webkit-transform: perspective(200px) rotateY(90deg);
@@ -569,8 +690,10 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
               -webkit-transform 0.3s 0.3s,
               transform 0.3s 0.3s,
               visibility 0s 0.6s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* Botón cerrar visible */
 .desktop .info-hotspot.visible .info-hotspot-close-wrapper {
   visibility: visible;
   -ms-transform: perspective(200px) rotateY(0deg);
@@ -592,6 +715,7 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
   margin: 15%;
 }
 
+/* Contenido de texto: Rota hacia arriba desde abajo en expansión, desplazable si es largo. Glassmorphism. */
 .info-hotspot .info-hotspot-text {
   position: absolute;
   width: 300px;
@@ -600,12 +724,14 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
   top: 40px;
   left: 0;
   padding: 10px;
-  background-color: rgb(58,68,84);
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
   overflow-y: auto;
   visibility: hidden;
-  /* rotate(90deg) causes transition flicker on Firefox 58 */
+  /* rotate(90deg) causa parpadeo en transición en Firefox 58 */
   -ms-transform: perspective(200px) rotateX(-89.999deg);
   -webkit-transform: perspective(200px) rotateX(-89.999deg);
   transform: perspective(200px) rotateX(-89.999deg);
@@ -620,6 +746,7 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
               -webkit-transform 0.3s,
               transform 0.3s,
               visibility 0s 0.3s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
   -moz-user-select: text;
   -webkit-user-select: text;
@@ -627,6 +754,7 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
   user-select: text;
 }
 
+/* Texto visible */
 .desktop .info-hotspot.visible .info-hotspot-text {
   visibility: visible;
   -ms-transform: perspective(200px) rotateX(0deg);
@@ -642,8 +770,12 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
               visibility 0s 0s;
 }
 
-/* Info hotspot modal */
-
+/* 
+ * Modal de Hotspot de Información (Superposición Completa en Móvil)
+ * Superposición de pantalla completa para información en dispositivos más pequeños o al expandir.
+ * Desvanecimiento con animaciones escalonadas para encabezado, texto y botón cerrar.
+ * z-index alto para superponer el panorama. Glassmorphism en todo el modal.
+ */
 .desktop .info-hotspot-modal {
   display: none;
 }
@@ -656,7 +788,8 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
   height: 100%;
   overflow: hidden;
   z-index: 11000 !important;
-  background-color: rgba(0,0,0,.5);
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(5px);
   line-height: 1.2em;
   opacity: 0;
   visibility: hidden;
@@ -682,11 +815,14 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
   right: 10px;
   width: auto;
   height: 50px;
-  background-color: rgb(103,115,131);
-  background-color: rgba(103,115,131,0.8);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
   opacity: 0;
   -webkit-transition: opacity 0.3s ease-in-out 0.2s;
   transition: opacity 0.3s ease-in-out 0.2s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .info-hotspot-modal.visible .info-hotspot-header {
@@ -739,9 +875,12 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
   right: 0;
   width: 50px;
   height: 50px;
-  background-color: rgb(78,88,104);
-  background-color: rgba(78,88,104,0.8);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0 8px 0 0;
   cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .info-hotspot-modal .info-hotspot-close-icon {
@@ -757,12 +896,15 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
   left: 10px;
   right: 10px;
   padding: 10px;
-  background-color: rgb(58,68,84);
-  background-color: rgba(58,68,84,0.8);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0 0 8px 8px;
   overflow-y: auto;
   opacity: 0;
   -webkit-transition: opacity 0.3s ease-in-out;
   transition: opacity 0.3s ease-in-out;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
   -moz-user-select: text;
   -webkit-user-select: text;
@@ -776,8 +918,12 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
   transition: opacity 0.3s ease-in-out 0.4s;
 }
 
-/* View control buttons */
-
+/* 
+ * Botones de Control de Vista
+ * Botones centrados en la parte inferior para ajuste manual de vista (zoom, pan).
+ * Ocultos por defecto a menos que se habiliten; ocultamiento responsivo en pantallas pequeñas.
+ * Posicionados horizontalmente con márgenes para espaciado. Glassmorphism aplicado.
+ */
 .viewControlButton {
   display: none;
   position: absolute;
@@ -786,15 +932,18 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
   width: 40px;
   height: 40px;
   padding: 5px;
-  background-color: rgb(103,115,131);
-  background-color: rgba(103,115,131,0.8);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 body.view-control-buttons .viewControlButton {
   display: block;
 }
 
-/* Hide controls when width is too small */
+/* Ocultar controles cuando el ancho es demasiado pequeño */
 @media (max-width: 600px) {
   body.view-control-buttons .viewControlButton {
     display: none;
@@ -809,7 +958,8 @@ body.view-control-buttons .viewControlButton {
   height: 30px;
 }
 
-/* Center is at margin-left: -20px */
+/* El centro está en margin-left: -20px */
+/* Posicionamiento para 6 botones: espaciados uniformemente en la parte inferior */
 .viewControlButton-1 {
   margin-left: -145px;
 }
