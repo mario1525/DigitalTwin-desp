@@ -32,7 +32,7 @@ html, body {
   height: 100%;
   padding: 0;
   margin: 0;
-  background: linear-gradient(135deg, #0b1c2c 0%, #1f3a50 100%);
+  background: linear-gradient(135deg, #0b1c2c 0%, #1e222578 100%);
   color: #e0e0e0;
   overflow: hidden;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -74,7 +74,7 @@ a, a:hover, a:active, a:visited {
   right: 40px;
   height: 40px;
   text-align: center;
-  background: #060239a7;
+  background: rgba(76, 75, 79, 0.199);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -204,7 +204,7 @@ body.fullscreen-enabled #fullscreenToggle {
   width: 40px;
   height: 40px;
   padding: 5px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(76, 75, 79, 0.199);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
@@ -271,7 +271,7 @@ body.fullscreen-enabled.mobile #autorotateToggle {
   width: 40px;
   height: 40px;
   padding: 5px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(76, 75, 79, 0.199);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
@@ -342,7 +342,7 @@ body.fullscreen-enabled.mobile #autorotateToggle {
   margin-left: 0;
   -webkit-transition: margin-left 0.5s ease-in-out;
   transition: margin-left 0.5s ease-in-out;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(76, 75, 79, 0.199);
   backdrop-filter: blur(10px);
   border-right: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -477,7 +477,7 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
   padding: 8px 10px;
 
   border-radius: 8px;
-  background: #060239a7;
+  background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -563,7 +563,7 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
   width: 40px;
   height: 40px;
   border-radius: 20px;
-  background: #060239a7;
+  background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   cursor: pointer;
