@@ -1,153 +1,981 @@
-/* =======================================
-   ESTILO MODERNO VISOR 360° - LAB MINERALES
-   Paleta: Azul oscuro + acentos naranjas
-   Autor: Mario Beltrán
-   ======================================= */
+/* 
+ * Reinicio Global y Estilos Base
+ * Estas reglas aseguran un box-sizing consistente, previenen la selección de texto y el arrastre
+ * para elementos interactivos, y establecen la estructura básica del documento para el visor de panoramas.
+ * Prefijos de proveedores aseguran compatibilidad entre navegadores (WebKit, Mozilla, MS).
+ */
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -ms-text-size-adjust: none;
+  -moz-text-size-adjust: none;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+  -ms-content-zooming: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
 
-/* Fondo general con degradado moderno */
-body {
+/* 
+ * Estilos de HTML y Body
+ * Cobertura completa del viewport sin márgenes ni relleno, desbordamiento oculto para prevenir el desplazamiento,
+ * y un tema oscuro adecuado para la visualización de panoramas. La pila de fuentes prioriza las del sistema.
+ */
+html, body {
+  width: 100%;
+  height: 100%;
+  padding: 0;
   margin: 0;
-  height: 100vh;
   background: linear-gradient(135deg, #0b1c2c 0%, #1f3a50 100%);
   color: #e0e0e0;
-  font-family: 'Segoe UI', Roboto, sans-serif;
+  overflow: hidden;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  background-color: #000;
+}
+
+/* 
+ * Estilos de Enlaces
+ * Aseguran que los enlaces hereden el color y no tengan subrayado para una integración fluida con la UI.
+ */
+a, a:hover, a:active, a:visited {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* 
+ * Contenedor de Panorama
+ * Posicionamiento absoluto para llenar todo el viewport, con desbordamiento oculto para el visor de 360 grados.
+ */
+#pano {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
 }
 
-/* Contenedor principal del visor */
-#viewer {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  background-color: rgba(10, 20, 30, 0.85);
-}
-
-/* ===============================
-   BOTONES DE CONTROL PRINCIPALES
-   =============================== */
-.viewControlButton {
+/* 
+ * Estilos de la Barra de Título
+ * Barra superior para mostrar el nombre de la escena actual. Ajusta el ancho según la presencia de controles.
+ * Fondo semi-transparente con elipsis para títulos largos. Efecto glassmorphism: transparencia y desenfoque para apariencia de vidrio esmerilado.
+ */
+#titleBar {
   position: absolute;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(6px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  top: 0;
+  left: 0;
+  right: 40px;
+  height: 40px;
+  text-align: center;
+  background: #060239a7;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.viewControlButton img.icon {
-  width: 22px;
-  height: 22px;
-  filter: brightness(1.2);
+/* Ajustes móviles: Barra de título más alta y margen derecho más amplio para objetivos táctiles. */
+.mobile #titleBar {
+  height: 50px;
+  right: 50px;
 }
 
-/* Efectos hover */
-.viewControlButton:hover {
-  background: rgba(255, 123, 0, 0.15);
-  border-color: #ff7b00;
-  box-shadow: 0 0 12px #ff7b00;
-  transform: scale(1.05);
-}
-
-/* Posicionamiento base (puedes ajustar según tu layout actual) */
-#autorotateToggle {
-  bottom: 20px;
-  right: 20px;
-}
-#fullscreenToggle {
-  bottom: 20px;
+/* Si hay un botón de pantalla completa, la barra de título debe dejar espacio para él */
+body.fullscreen-enabled #titleBar {
   right: 80px;
 }
-#viewUp {
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-#viewDown {
-  bottom: 80px;
-  left: 50%;
-  transform: translateX(-50%);
+
+/* Ajuste fullscreen móvil */
+body.fullscreen-enabled.mobile #titleBar {
+  right: 100px;
 }
 
-/* ===============================
-   ICONOS Y ESTADOS
-   =============================== */
-.icon {
-  transition: opacity 0.2s ease;
+/* Si hay múltiples escenas, la barra de título debe dejar espacio para el interruptor de lista de escenas */
+body.multiple-scenes #titleBar {
+  left: 40px;
 }
-.icon.on {
+
+/* Ajuste multiple-scenes móvil */
+body.multiple-scenes.mobile #titleBar {
+  left: 50px;
+}
+
+#titleBar .sceneName {
+  width: 100%;
+  height: 100%;
+  line-height: 30px;
+  padding: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(5px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  -moz-user-select: text;
+  -webkit-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* Altura de línea del nombre de escena móvil */
+.mobile #titleBar .sceneName {
+  line-height: 40px;
+}
+
+/* 
+ * Botón de Interruptor de Pantalla Completa
+ * Botón alineado a la derecha para alternar el modo de pantalla completa. Oculto a menos que sea compatible.
+ * Estados de ícono (on/off) para entrar/salir de pantalla completa. Efecto glassmorphism aplicado.
+ */
+#fullscreenToggle {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  padding: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Tamaño del interruptor fullscreen móvil */
+.mobile #fullscreenToggle {
+  width: 50px;
+  height: 50px;
+}
+
+/* Mostrar cuando fullscreen está habilitado */
+body.fullscreen-enabled #fullscreenToggle {
+  display: block;
+}
+
+#fullscreenToggle .icon {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 30px;
+  height: 30px;
+}
+
+/* Posicionamiento de ícono móvil */
+.mobile #fullscreenToggle .icon {
+  top: 10px;
+  right: 10px;
+}
+
+/* Por defecto: Mostrar ícono off */
+#fullscreenToggle .icon.on {
+  display: none;
+}
+
+#fullscreenToggle .icon.off {
+  display: block;
+}
+
+/* Estado habilitado: Mostrar ícono on */
+#fullscreenToggle.enabled .icon.on {
+  display: block;
+}
+
+#fullscreenToggle.enabled .icon.off {
+  display: none;
+}
+
+/* 
+ * Botón de Interruptor de Rotación Automática
+ * Controla la rotación automática del panorama. Siempre visible, posicionado a la derecha (se desplaza a la izquierda si fullscreen está presente).
+ * Ícono alterna entre estados on/off. Efecto glassmorphism para transparencia y vidrio.
+ */
+#autorotateToggle {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  padding: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Tamaño de rotación automática móvil */
+.mobile #autorotateToggle {
+  width: 50px;
+  height: 50px;
+}
+
+/* Si hay un botón de fullscreen, autorotate debe colocarse un poco a la izquierda */
+body.fullscreen-enabled #autorotateToggle {
+  right: 40px;
+}
+
+/* Desplazamiento autorotate fullscreen móvil */
+body.fullscreen-enabled.mobile #autorotateToggle {
+  right: 50px;
+}
+
+#autorotateToggle .icon {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 30px;
+  height: 30px;
+}
+
+/* Posicionamiento de ícono móvil */
+.mobile #autorotateToggle .icon {
+  top: 10px;
+  right: 10px;
+}
+
+/* Por defecto: Mostrar ícono off */
+#autorotateToggle .icon.on {
+  display: none;
+}
+
+#autorotateToggle .icon.off {
+  display: block;
+}
+
+/* Estado habilitado: Mostrar ícono on */
+#autorotateToggle.enabled .icon.on {
+  display: block;
+}
+
+#autorotateToggle.enabled .icon.off {
+  display: none;
+}
+
+/* 
+ * Botón de Interruptor de Lista de Escenas
+ * Botón alineado a la izquierda para mostrar/ocultar la lista de escenas en tours multi-escena.
+ * Incluye texto e ícono para claridad. Efecto glassmorphism.
+ */
+#sceneListToggle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  padding: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Tamaño del interruptor de lista de escenas móvil */
+.mobile #sceneListToggle {
+  width: 50px;
+  height: 50px;
+}
+
+#sceneListToggle .text {
+  position: absolute;
+  top: 5px;
+  left: 15px;
+  width: 100%;
+  line-height: 30px;
+}
+
+#sceneListToggle .icon {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 30px;
+  height: 30px;
+}
+
+/* Posicionamiento de ícono móvil */
+.mobile #sceneListToggle .icon {
+  top: 10px;
+  right: 10px;
+}
+
+/* Por defecto: Mostrar ícono off */
+#sceneListToggle .icon.on {
+  display: none;
+}
+
+#sceneListToggle .icon.off {
+  display: block;
+}
+
+/* Estado habilitado: Mostrar ícono on */
+#sceneListToggle.enabled .icon.on {
+  display: block;
+}
+
+#sceneListToggle.enabled .icon.off {
+  display: none;
+}
+
+/* 
+ * Panel de Lista de Escenas
+ * Barra lateral deslizante para navegar escenas. Se anima desde la izquierda.
+ * Lista desplazable de nombres de escenas con resaltado de hover y estado actual.
+ * En móvil, superposición de ancho completo. Efecto glassmorphism para el panel.
+ */
+#sceneList {
+  position: absolute;
+  top: 0;
+  left: -220px;
+  padding-top: 40px;
+  width: 220px;
+  max-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin-left: 0;
+  -webkit-transition: margin-left 0.5s ease-in-out;
+  transition: margin-left 0.5s ease-in-out;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Relleno de lista de escenas móvil */
+.mobile #sceneList {
+  padding-top: 50px;
+}
+
+#sceneList .scenes {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(5px);
+}
+
+/* Lista de escenas de pantalla completa en móvil */
+.mobile #sceneList {
+  width: 100%;
+  height: 100%;
+  left: -100%;
+}
+
+.mobile #sceneList.enabled {
+  margin-left: 100%;
+}
+
+.mobile #sceneList .scenes {
+  height: 100%;
+}
+
+/* Habilitado: Deslizar hacia adentro */
+#sceneList.enabled {
+  margin-left: 220px;
+}
+
+#sceneList .scene {
+  display: block;
+  width: 100%;
+  height: 30px;
+}
+
+/* Altura de escena móvil */
+.mobile #sceneList .scene {
+  height: 40px;
+}
+
+#sceneList .scene .text {
+  width: 100%;
+  height: 100%;
+  padding: 0 15px;
+  line-height: 30px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Altura de línea de texto móvil */
+.mobile #sceneList .scene .text {
+  line-height: 40px;
+}
+
+/* Efecto hover para dispositivos no táctiles */
+.no-touch #sceneList .scene:hover {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(5px);
+}
+
+#sceneList .scene.current {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(5px);
+}
+
+/* Ocultar lista de escenas cuando solo existe una escena única */
+body.single-scene #sceneList, body.single-scene #sceneListToggle {
+  display: none;
+}
+
+/* 
+ * Estilos de Hotspot de Enlace
+ * Puntos de navegación interactivos en el panorama. Íconos circulares con tooltips en hover.
+ * Se desvanece entrada/salida para una UX suave; más grande en móvil. Efecto glassmorphism en íconos y tooltips.
+ */
+.link-hotspot {
+  width: 60px;
+  height: 60px;
+  margin-left: -30px;
+  margin-top: -30px;
+  opacity: 0.9;
+  -webkit-transition: opacity 0.2s;
+  transition: opacity 0.2s;
+}
+
+.no-touch .link-hotspot:hover {
   opacity: 1;
 }
-.icon.off {
-  opacity: 0.4;
+
+/* Tamaño de hotspot móvil */
+.mobile .link-hotspot {
+  width: 70px;
+  height: 70px;
 }
 
-/* ===============================
-   INDICADORES Y ETIQUETAS
-   =============================== */
-.label {
+.link-hotspot-icon {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  background: #acacac79;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 
+ * Tooltip de Hotspot de Enlace
+ * Aparece en hover con el nombre de la escena. Desliza desde la derecha con desvanecimiento.
+ * Ancho limitado, elipsis para texto largo. Eventos de puntero deshabilitados por defecto. Glassmorphism.
+ */
+.link-hotspot-tooltip {
   position: absolute;
-  bottom: 60px;
+  left: 100%;
+  top: 14px; /* ( 60 - (16 + 2*8) ) / 2 */
+  margin-left: 3px;
+
+  font-size: 16px;
+
+  max-width: 300px;
+
+  padding: 8px 10px;
+
+  border-radius: 8px;
+  background: #060239a7;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  color: #fff;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+
+  cursor: pointer;
+
+  opacity: 0;
+
+  -ms-transform: translateX(-8px);
+  -webkit-transform: translateX(-8px);
+  transform: translateX(-8px);
+
+  -webkit-transition: -ms-transform 0.3s,
+                      -webkit-transform 0.3s,
+                      transform 0.3s,
+                      opacity 0.3s;
+  transition: -ms-transform 0.3s,
+              -webkit-transform 0.3s,
+              transform 0.3s,
+              opacity 0.3s;
+}
+
+/* Posicionamiento de tooltip móvil */
+.mobile .link-hotspot-tooltip {
+  top: 19px; /* ( 70 - (16 + 2*8) ) / 2 */
+}
+
+/* Hover: Mostrar y deslizar hacia adentro */
+.no-touch .link-hotspot:hover .link-hotspot-tooltip {
+  opacity: 1;
+  -ms-transform: translateX(0);
+  -webkit-transform: translateX(0);
+  transform: translateX(0);
+}
+
+/* Prevenir que el tooltip dispare eventos */
+.link-hotspot-tooltip {
+  pointer-events: none;
+}
+.no-touch .link-hotspot:hover .link-hotspot-tooltip {
+  pointer-events: all;
+}
+
+/* Modo fallback sin pointer-events (IE8-10) */
+.tooltip-fallback .link-hotspot-tooltip {
+  display: none;
+}
+.no-touch .tooltip-fallback .link-hotspot:hover .link-hotspot-tooltip {
+  display: block;
+}
+
+/* 
+ * Estilos de Hotspot de Información
+ * Puntos de información interactivos. Encabezado circular se expande para mostrar título y texto en interacción.
+ * Animaciones para revelación suave; soporta hover en desktop, clic en móvil.
+ * Texto seleccionable para copiar contenido. Glassmorphism en encabezados y texto.
+ */
+.info-hotspot {
+  line-height: 1.2em;
+  opacity: 0.9;
+  -webkit-transition: opacity 0.2s 0.2s;
+  transition: opacity 0.2s 0.2s;
+}
+
+/* Hover: Opacidad completa */
+.no-touch .info-hotspot:hover {
+  opacity: 1;
+  -webkit-transition: opacity 0.2s;
+  transition: opacity 0.2s;
+}
+
+.info-hotspot.visible {
+  opacity: 1;
+}
+
+.info-hotspot .info-hotspot-header {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  background: #060239a7;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  -webkit-transition: width 0.3s ease-in-out 0.5s,
+                      border-radius 0.3s ease-in-out 0.5s;
+  transition: width 0.3s ease-in-out 0.5s,
+              border-radius 0.3s ease-in-out 0.5s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Tamaño de encabezado móvil */
+.mobile .info-hotspot .info-hotspot-header {
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+}
+
+/* Hover en desktop: Expandir encabezado */
+.desktop.no-touch .info-hotspot .info-hotspot-header:hover {
+  width: 260px;
+  border-radius: 8px;
+  -webkit-transition: width 0.3s ease-in-out,
+                      border-radius 0.3s ease-in-out;
+  transition: width 0.3s ease-in-out,
+              border-radius 0.3s ease-in-out;
+}
+
+/* Estado expandido visible */
+.desktop .info-hotspot.visible .info-hotspot-header,
+.desktop.no-touch .info-hotspot.visible .info-hotspot-header:hover {
+  width: 260px;
+  border-radius: 8px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  -webkit-transition: width 0.3s ease-in-out,
+                      border-radius 0.3s ease-in-out;
+  transition: width 0.3s ease-in-out,
+              border-radius 0.3s ease-in-out;
+}
+
+.info-hotspot .info-hotspot-icon-wrapper {
+  width: 40px;
+  height: 40px;
+}
+
+/* Envoltorio de ícono móvil */
+.mobile .info-hotspot .info-hotspot-icon-wrapper {
+  width: 50px;
+  height: 50px;
+}
+
+.info-hotspot .info-hotspot-icon {
+  width: 90%;
+  height: 90%;
+  margin: 5%;
+}
+
+/* Envoltorio de título: Anima ancho y relleno para revelación */
+.info-hotspot .info-hotspot-title-wrapper {
+  position: absolute;
+  left: 40px;
+  top: 0;
+  width: 0;
+  height: 40px;
+  padding: 0;
+  overflow: hidden;
+  -webkit-transition: width 0s 0.4s,
+                      padding 0s 0.4s;
+  transition: width 0s 0.4s,
+              padding 0s 0.4s;
+}
+
+/* Envoltorio de título expandido */
+.desktop .info-hotspot.visible .info-hotspot-title-wrapper,
+.desktop.no-touch .info-hotspot .info-hotspot-header:hover .info-hotspot-title-wrapper {
+  width: 220px;
+  padding: 0 5px;
+  -webkit-transition: width 0s 0.4s,
+                      padding 0s 0.4s;
+  transition: width 0s 0.4s,
+              padding 0s 0.4s;
+}
+
+.info-hotspot .info-hotspot-title-wrapper:before {
+  content: '';
+  display: inline-block;
+  vertical-align: middle;
+  height: 100%;
+}
+
+.info-hotspot .info-hotspot-title {
+  display: inline-block;
+  vertical-align: middle;
+
+  -moz-user-select: text;
+  -webkit-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* Envoltorio de botón cerrar: Rota hacia adentro en expansión. Glassmorphism. */
+.info-hotspot .info-hotspot-close-wrapper {
+  position: absolute;
+  left: 260px;
+  top: 0;
+  height: 40px;
+  width: 40px;
+  border-top-right-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  visibility: hidden;
+  -ms-transform: perspective(200px) rotateY(90deg);
+  -webkit-transform: perspective(200px) rotateY(90deg);
+  transform: perspective(200px) rotateY(90deg);
+  -ms-transform-origin: 0 50% 0;
+  -webkit-transform-origin: 0 50% 0;
+  transform-origin: 0 50% 0;
+  -webkit-transition: -ms-transform 0.3s 0.3s,
+                      -webkit-transform 0.3s 0.3s,
+                      transform 0.3s 0.3s,
+                      visibility 0s 0.6s;
+  transition: -ms-transform 0.3s 0.3s,
+              -webkit-transform 0.3s 0.3s,
+              transform 0.3s 0.3s,
+              visibility 0s 0.6s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Botón cerrar visible */
+.desktop .info-hotspot.visible .info-hotspot-close-wrapper {
+  visibility: visible;
+  -ms-transform: perspective(200px) rotateY(0deg);
+  -webkit-transform: perspective(200px) rotateY(0deg);
+  transform: perspective(200px) rotateY(0deg);
+  -webkit-transition: -ms-transform 0.3s,
+                      -webkit-transform 0.3s,
+                      transform 0.3s,
+                      visibility 0s 0s;
+  transition: -ms-transform 0.3s,
+              -webkit-transform 0.3s,
+              transform 0.3s,
+              visibility 0s 0s;
+}
+
+.info-hotspot .info-hotspot-close-icon {
+  width: 70%;
+  height: 70%;
+  margin: 15%;
+}
+
+/* Contenido de texto: Rota hacia arriba desde abajo en expansión, desplazable si es largo. Glassmorphism. */
+.info-hotspot .info-hotspot-text {
+  position: absolute;
+  width: 300px;
+  height: auto;
+  max-height: 200px;
+  top: 40px;
+  left: 0;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+  overflow-y: auto;
+  visibility: hidden;
+  /* rotate(90deg) causa parpadeo en transición en Firefox 58 */
+  -ms-transform: perspective(200px) rotateX(-89.999deg);
+  -webkit-transform: perspective(200px) rotateX(-89.999deg);
+  transform: perspective(200px) rotateX(-89.999deg);
+  -ms-transform-origin: 50% 0 0;
+  -webkit-transform-origin: 50% 0 0;
+  transform-origin: 50% 0 0;
+  -webkit-transition: -ms-transform 0.3s,
+                      -webkit-transform 0.3s,
+                      transform 0.3s,
+                      visibility 0s 0.3s;
+  transition: -ms-transform 0.3s,
+              -webkit-transform 0.3s,
+              transform 0.3s,
+              visibility 0s 0.3s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  -moz-user-select: text;
+  -webkit-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* Texto visible */
+.desktop .info-hotspot.visible .info-hotspot-text {
+  visibility: visible;
+  -ms-transform: perspective(200px) rotateX(0deg);
+  -webkit-transform: perspective(200px) rotateX(0deg);
+  transform: perspective(200px) rotateX(0deg);
+  -webkit-transition: -ms-transform 0.3s 0.3s,
+                      -webkit-transform 0.3s 0.3s,
+                      transform 0.3s 0.3s,
+                      visibility 0s 0s;
+  transition: -ms-transform 0.3s 0.3s,
+              -webkit-transform 0.3s 0.3s,
+              transform 0.3s 0.3s,
+              visibility 0s 0s;
+}
+
+/* 
+ * Modal de Hotspot de Información (Superposición Completa en Móvil)
+ * Superposición de pantalla completa para información en dispositivos más pequeños o al expandir.
+ * Desvanecimiento con animaciones escalonadas para encabezado, texto y botón cerrar.
+ * z-index alto para superponer el panorama. Glassmorphism en todo el modal.
+ */
+.desktop .info-hotspot-modal {
+  display: none;
+}
+
+.info-hotspot-modal {
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 11000 !important;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(5px);
+  line-height: 1.2em;
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transition: opacity 0.2s ease-in-out 0.5s,
+                      visibility 0s 0.7s;
+  transition: opacity 0.2s ease-in-out 0.5s,
+              visibility 0s 0.7s;
+}
+
+.info-hotspot-modal.visible {
+  opacity: 1;
+  visibility: visible;
+  -webkit-transition: opacity 0.2s ease-in-out,
+                      visibility 0s 0s;
+  transition: opacity 0.2s ease-in-out,
+              visibility 0s 0s;
+}
+
+.info-hotspot-modal .info-hotspot-header {
+  position: absolute;
+  top: 60px;
+  left: 10px;
+  right: 10px;
+  width: auto;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  opacity: 0;
+  -webkit-transition: opacity 0.3s ease-in-out 0.2s;
+  transition: opacity 0.3s ease-in-out 0.2s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.info-hotspot-modal.visible .info-hotspot-header {
+  opacity: 1;
+  -webkit-transition: opacity 0.3s ease-in-out 0.2s;
+  transition: opacity 0.3s ease-in-out 0.2s;
+}
+
+.info-hotspot-modal .info-hotspot-icon-wrapper {
+  width: 50px;
+  height: 50px;
+}
+
+.info-hotspot-modal .info-hotspot-icon {
+  width: 90%;
+  height: 90%;
+  margin: 5%;
+}
+
+.info-hotspot-modal .info-hotspot-title-wrapper {
+  position: absolute;
+  top: 0;
+  left: 50px;
+  right: 50px;
+  width: auto;
+  height: 50px;
+  padding: 0 10px;
+}
+
+.info-hotspot-modal .info-hotspot-title-wrapper:before {
+  content: '';
+  display: inline-block;
+  vertical-align: middle;
+  height: 100%;
+}
+
+.info-hotspot-modal .info-hotspot-title {
+  display: inline-block;
+  vertical-align: middle;
+
+  -moz-user-select: text;
+  -webkit-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+.info-hotspot-modal .info-hotspot-close-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0 8px 0 0;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.info-hotspot-modal .info-hotspot-close-icon {
+  width: 70%;
+  height: 70%;
+  margin: 15%;
+}
+
+.info-hotspot-modal .info-hotspot-text {
+  position: absolute;
+  top: 110px;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0 0 8px 8px;
+  overflow-y: auto;
+  opacity: 0;
+  -webkit-transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in-out;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  -moz-user-select: text;
+  -webkit-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+.info-hotspot-modal.visible .info-hotspot-text {
+  opacity: 1;
+  -webkit-transition: opacity 0.3s ease-in-out 0.4s;
+  transition: opacity 0.3s ease-in-out 0.4s;
+}
+
+/* 
+ * Botones de Control de Vista
+ * Botones centrados en la parte inferior para ajuste manual de vista (zoom, pan).
+ * Ocultos por defecto a menos que se habiliten; ocultamiento responsivo en pantallas pequeñas.
+ * Posicionados horizontalmente con márgenes para espaciado. Glassmorphism aplicado.
+ */
+.viewControlButton {
+  display: none;
+  position: absolute;
+  bottom: 0;
   left: 50%;
-  transform: translateX(-50%);
-  padding: 8px 14px;
-  background: rgba(20, 40, 60, 0.85);
-  border-radius: 12px;
-  color: #ffffff;
-  font-size: 14px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  width: 40px;
+  height: 40px;
+  padding: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* ===============================
-   EFECTOS Y TRANSICIONES GLOBALES
-   =============================== */
-button, a, .viewControlButton {
-  outline: none;
-  user-select: none;
+body.view-control-buttons .viewControlButton {
+  display: block;
 }
 
-/* Transiciones suaves */
-* {
-  transition: background 0.3s ease, border 0.3s ease, color 0.3s ease, transform 0.2s ease;
-}
-
-/* ===============================
-   RESPONSIVE
-   =============================== */
-@media (max-width: 768px) {
-  .viewControlButton {
-    width: 42px;
-    height: 42px;
-  }
-  #fullscreenToggle {
-    right: 70px;
-  }
-  #autorotateToggle {
-    right: 15px;
-  }
-  .label {
-    font-size: 13px;
-    bottom: 50px;
+/* Ocultar controles cuando el ancho es demasiado pequeño */
+@media (max-width: 600px) {
+  body.view-control-buttons .viewControlButton {
+    display: none;
   }
 }
 
-/* ===============================
-   ANIMACIÓN OPCIONAL (brillo suave)
-   =============================== */
-@keyframes glow {
-  0% {
-    box-shadow: 0 0 6px rgba(255, 123, 0, 0.2);
-  }
-  100% {
-    box-shadow: 0 0 16px rgba(255, 123, 0, 0.6);
-  }
+.viewControlButton .icon {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 30px;
+  height: 30px;
 }
-.viewControlButton:hover {
-  animation: glow 1s ease-in-out infinite alternate;
+
+/* El centro está en margin-left: -20px */
+/* Posicionamiento para 6 botones: espaciados uniformemente en la parte inferior */
+.viewControlButton-1 {
+  margin-left: -145px;
+}
+.viewControlButton-2 {
+  margin-left: -95px;
+}
+.viewControlButton-3 {
+  margin-left: -45px;
+}
+.viewControlButton-4 {
+  margin-left: 5px;
+}
+.viewControlButton-5 {
+  margin-left: 55px;
+}
+.viewControlButton-6 {
+  margin-left: 105px;
 }
