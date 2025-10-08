@@ -1431,8 +1431,8 @@ var APP_DATA = {
         {
           "yaw": -0.989309835477215,
           "pitch": -0.35026659675516925,
-          "title": "determinador de azufre 632&nbsp;&nbsp;",
-          "text": "instrumento especializado para medir el contenido total de azufre en combustibles y materiales sólidos, garantizando análisis precisos y cumplimiento de normas de calidad.<div><br></div>"
+          "title": "Determinador de Azufre 632",
+          "text": "Equipo de combustión y detección infrarroja que determina el contenido total de azufre en carbones, coques y biomasas, cumpliendo con ASTM D4239 / ISO 19579. Controla calidad y emisiones ambientales.<div><br></div>"
         },
         {
           "yaw": -0.5075271339042722,
